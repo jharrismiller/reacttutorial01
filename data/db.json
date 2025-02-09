@@ -1,0 +1,39 @@
+{
+  "items": [
+    {
+      "id": 1,
+      "checked": false,
+      "item": "Ice Cream"
+    },
+    {
+      "id": 2,
+      "checked": false,
+      "item": "Candy"
+    },
+    {
+      "id": 3,
+      "checked": false,
+      "item": "Soap"
+    },
+    {
+      "id": 4,
+      "checked": false,
+      "item": "Milk"
+    },
+    {
+      "id": 5,
+      "checked": true,
+      "item": "Eggs"
+    },
+    {
+      "id": 6,
+      "checked": false,
+      "item": "Mutton"
+    },
+    {
+      "id": 7,
+      "checked": false,
+      "item": "Butter"
+    }
+  ]
+}
