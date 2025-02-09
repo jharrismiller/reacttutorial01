@@ -27,47 +27,63 @@ function App() {
         setFetchError(null);
       } catch (err) {
         setFetchError(err.message);
-      } finally{
+      } finally {
         setIsLoading(false);
       }
     };
-    setTimeout(() => {
-      fetchItems();
-    }, 2000);
+    fetchItems();
   }, []);
 
   const addItem = async (item) => {
-    const id = items.length ? items[items.length - 1].id + 1 : 1;
+    const id = items.length ? parseInt(items[items.length - 1].id, 0) + 1 : 1;
     const newItem = { id, checked: false, item };
+    console.log(newItem);
     const listItems = [...items, newItem];
     setItems(listItems);
 
-    const postOptions = { 
-      method:'POST', 
-      headers: { 'Content-Type': 'application/json' }, 
-      body: JSON.stringify(newItem) 
+    const postOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newItem),
     };
 
     const result = await apiRequest(API_URL, postOptions);
-    
-    if (result) 
-      setFetchError(result);
-    
+
+    if (result) setFetchError(result);
   };
 
-  const handleCheck = (id) => {
+  const handleCheck = async (id) => {
+    let theItem = null;
     const newItems = items.map((item) => {
       if (item.id === id) {
         item.checked = !item.checked;
+        theItem = item;
       }
       return item;
     });
+
     setItems(newItems);
+
+    const updateOptions = {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ checked: theItem.checked }),
+    };
+
+    const result = await apiRequest(`${API_URL}/${theItem.id}`, updateOptions);
+
+    if (result) setFetchError(result);
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     const newItems = items.filter((item) => item.id !== id);
     setItems(newItems);
+
+    const deleteOptions = { method: "DELETE" };
+
+    const result = await apiRequest(`${API_URL}/${id}`, deleteOptions);
+
+    if (result) setFetchError(result);
   };
 
   const handleSubmit = (e) => {
@@ -88,7 +104,7 @@ function App() {
       <SearchItem search={search} setSearch={setSearch} />
       <main>
         {isLoading && <p>Loading...</p>}
-        
+
         {fetchError && <p style={{ color: "red" }}>{`Error: ${fetchError}`}</p>}
         {!fetchError && !isLoading && (
           <Content
